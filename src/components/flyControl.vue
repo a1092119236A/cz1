@@ -1,37 +1,47 @@
 <template>
-  <button @click="start">开始漫游</button>
   <button @click="next">下一站</button>
+  <button @click="start">开始漫游</button>
   <button @click="stop">停止漫游</button>
-  <input type="text" v-model="hprArray" />
 </template>
 <script setup>
-import { ref,computed } from "vue";
+import { ref, unref } from "vue";
 import { useVueCesium } from "vue-cesium";
 const vc = useVueCesium();
 let start = ref();
 let stop = ref();
 let next = ref();
-const hprArray = ref([0, 0, 0]);
-let hpr = computed(() => {
-  console.log(hpr.value);
-  return Cesium.HeadingPitchRoll.fromDegrees(...hprArray.value.split(','));
-});
-
+let fly, tours;
 
 vc.creatingPromise.then((vc) => {
   const viewer = vc.viewer;
+  const { camera, clock } = viewer;
   let i = 0;
-
-  let fly, tours;
+  Cesium.GeoJsonDataSource.load("点.json", {
+    // stroke: Cesium.Color.HOTPINK,
+    // fill: Cesium.Color.PINK,
+    // strokeWidth: 3,
+    // markerSymbol: "?",
+  }).then(function (dataSource) {
+    viewer.dataSources.add(dataSource).then((res) => {
+      tours = res.entities.values;
+      tours.forEach((tour) => {
+        // tour.billboard = undefined;
+        tour.label = new Cesium.LabelGraphics({
+          text: tour.name,
+          font: "12px monospace",
+          horizontalOrigin: Cesium.HorizontalOrigin.LEFT,
+          verticalOrigin: Cesium.VerticalOrigin.TOP,
+          pixelOffset: new Cesium.Cartesian2(15, 0),
+          scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+        });
+      });
+    });
+  });
   start.value = () => {
-    console.log(1);
     clearInterval(fly);
     fly = setInterval(() => {
-      const p = tours[i];
-      console.log(p);
-      viewer.flyTo(p, {
+      viewer.flyTo(tours[i], {
         duration: 3,
-        // offset: new Cesium.HeadingPitchRange(0, 0, 10)
       });
       i++;
       if (i >= tours.length) {
@@ -39,36 +49,27 @@ vc.creatingPromise.then((vc) => {
       }
     }, 5000);
   };
+
   stop.value = () => {
     clearInterval(fly);
   };
   next.value = () => {
-    const p = tours[i];
-    console.log(hpr.value);
-    viewer.flyTo(p, {
-      duration: 1,
-      offset: hpr.value,
-    });
-    // camera.flyTo( {
-    //   destination: new Cesium.Cartesian3.from(),
-    //   duration: 2,
-    //   // maximumHeight: 100,
-    //   // offset: new Cesium.HeadingPitchRange(Math.PI/4, Math.PI/4, 999)
-    // });
-    i++;
-  };
-  Cesium.GeoJsonDataSource.load("点.json", {
-    stroke: Cesium.Color.HOTPINK,
-    fill: Cesium.Color.PINK,
-    strokeWidth: 3,
-    markerSymbol: "?",
-  }).then(function (dataSource) {
-    viewer.dataSources.add(dataSource).then((res) => {
-      //按照轨迹飞行
-      tours = res.entities.values;
+    const p = tours[i].position;
+    const v = p.getValue(clock.currentTime);
+    // console.log(tours[i],p);
 
-      //检测到点击事件就打断
+    const c = Cesium.Cartographic.fromCartesian(v);
+    const n = Cesium.Cartesian3.fromRadians(c.longitude, c.latitude, 99999);
+    console.log(v, c, n);
+    // p.viewFrom = new Cesium.Cartesian3(0, 0, 999999);
+    camera.flyTo({
+      destination: n,
+      duration: 1,
+      complete: () => {
+        viewer.selectedEntity = tours[i]
+        i++;
+      },
     });
-  });
+  };
 });
 </script>
