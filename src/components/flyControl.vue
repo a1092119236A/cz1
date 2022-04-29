@@ -25,7 +25,7 @@ vc.creatingPromise.then((vc) => {
     viewer.dataSources.add(dataSource).then((res) => {
       tours = res.entities.values;
       tours.forEach((tour) => {
-        // tour.billboard = undefined;
+        tour.billboard = undefined;
         tour.label = new Cesium.LabelGraphics({
           text: tour.name,
           font: "12px monospace",
@@ -54,19 +54,19 @@ vc.creatingPromise.then((vc) => {
     clearInterval(fly);
   };
   next.value = () => {
-    const p = tours[i].position;
+    const tour=tours[i]
+    const p = tour.position;
     const v = p.getValue(clock.currentTime);
-    // console.log(tours[i],p);
 
     const c = Cesium.Cartographic.fromCartesian(v);
     const n = Cesium.Cartesian3.fromRadians(c.longitude, c.latitude, 99999);
-    console.log(v, c, n);
+    console.log(tour);
     // p.viewFrom = new Cesium.Cartesian3(0, 0, 999999);
     camera.flyTo({
       destination: n,
       duration: 1,
       complete: () => {
-        viewer.selectedEntity = tours[i];
+        viewer.selectedEntity = tour;
         i++;
       },
     });
