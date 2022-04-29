@@ -2,14 +2,13 @@
     <vc-viewer :scene3DOnly="true" @ready="onViewerReady" :imageryProvider="imageryProvider">
     <vc-terrain-provider-arcgis ></vc-terrain-provider-arcgis>
       <flyControl  />
-    <echartStyle />
   </vc-viewer>
   
 </template>
 <script setup>
 import { ref, computed } from "vue";
 import flyControl from "./flyControl.vue";
-import echartStyle from "./echartStyle.vue";
+// import echartStyle from "./echartStyle.vue";
 const imageryProvider = ref(null);
 const onViewerReady = (ready) => {
   const viewer = ready.viewer;
