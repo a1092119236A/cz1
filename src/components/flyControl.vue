@@ -66,7 +66,7 @@ vc.creatingPromise.then((vc) => {
       destination: n,
       duration: 1,
       complete: () => {
-        viewer.selectedEntity = tours[i]
+        viewer.selectedEntity = tours[i];
         i++;
       },
     });

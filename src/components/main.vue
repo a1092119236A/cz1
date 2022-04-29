@@ -8,7 +8,6 @@
 </template>
 <script setup>
 import { ref, computed } from "vue";
-import { VcViewer,VcTerrainProviderArcgis } from "vue-cesium";
 import flyControl from "./flyControl.vue";
 import echartStyle from "./echartStyle.vue";
 const imageryProvider = ref(null);
