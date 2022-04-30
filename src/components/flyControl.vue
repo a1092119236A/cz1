@@ -7,16 +7,13 @@
   
 </template>
 <script setup>
-import { ref, unref } from "vue";
-import { useVueCesium } from "vue-cesium";
-const vc = useVueCesium();
+import { ref, onMounted } from "vue";
 let start = ref();
 let stop = ref();
 let next = ref();
 let fly, tours;
-
-vc.creatingPromise.then((vc) => {
-  const viewer = vc.viewer;
+onMounted(()=>{
+ const viewer = main.viewer;
   const { camera, clock } = viewer;
   let i = 0;
   Cesium.GeoJsonDataSource.load("点.json", {
@@ -115,7 +112,8 @@ vc.creatingPromise.then((vc) => {
       },
     });
   }
-});
+})
+ 
 </script>
 <style scoped>
 .flyControl {

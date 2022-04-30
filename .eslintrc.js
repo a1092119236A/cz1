@@ -13,8 +13,9 @@ module.exports = {
     },
     "globals": {
         Cesium: 'readonly',
-        defineProps: 'readonly'
-    },    "plugins": [
+        defineProps: 'readonly',
+        main: 'writable',
+    }, "plugins": [
         "vue"
     ],
     "rules": {

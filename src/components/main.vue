@@ -1,27 +1,45 @@
 <template>
+<div>
 <div id="title">漫游长征路线三维地图展示</div>
-    <vc-viewer :scene3DOnly="true" @ready="onViewerReady" :imageryProvider="imageryProvider">
-    <vc-terrain-provider-arcgis ></vc-terrain-provider-arcgis>
-      <flyControl  />
-  </vc-viewer>
-  
+   <div id="container" ref="mapRef"> <flyControl v-if="loadFlyControl" /></div>
+     
+
+  </div>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import {ref,  onMounted } from "vue";
 import flyControl from "./flyControl.vue";
-// import echartStyle from "./echartStyle.vue";
-const imageryProvider = ref(null);
-const onViewerReady = (ready) => {
-  const viewer = ready.viewer;
-  //移除报错
-  viewer.infoBox.frame.removeAttribute("sandbox");
-  viewer.infoBox.frame.src = "about:blank";
+const loadFlyControl=ref(false);
+const mapRef = ref(null);
+onMounted( () => {
+  const viewer = new Cesium.Viewer(mapRef.value, {
+    imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+    url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+  }),terrainProvider : Cesium.createWorldTerrain(),
+
+    baseLayerPicker: false,
+    animation: false,
+    timeline: false,
+    fullscreenButton: false,
+    geocoder: false,
+    homeButton: false,
+    sceneModePicker: false,
+    navigationHelpButton: false,
+    infoBox: false,
+    selectionIndicator: false,
+    scene3DOnly: true,
+    shouldAnimate: true,
+    contextOptions: {
+      webgl: {
+        alpha: false
+      }
+    }
+  });
+  main.viewer=viewer;
+  loadFlyControl.value=true;
   //取消默认双击事件
   viewer.screenSpaceEventHandler.setInputAction(function () {},
   Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-  imageryProvider.value = new Cesium.ArcGisMapServerImageryProvider({
-    url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-  });
     Cesium.GeoJsonDataSource.load("面.json", {
   stroke: Cesium.Color.RED,
   fill: new Cesium.Color(0,0,0,0),
@@ -37,7 +55,7 @@ const onViewerReady = (ready) => {
   Cesium.GeoJsonDataSource.load("线.json").then(function (dataSource) {
     viewer.dataSources.add(dataSource).then((res) => {});
   });
-};
+})
 </script>
 <style scoped>
 #title{
