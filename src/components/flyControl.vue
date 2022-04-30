@@ -45,9 +45,7 @@ vc.creatingPromise.then((vc) => {
   start.value = () => {
     clearInterval(fly);
     fly = setInterval(() => {
-      viewer.flyTo(tours[i], {
-        duration: 3,
-      });
+    flyNext()
       i++;
       if (i >= tours.length) {
         clearInterval(fly);
@@ -58,7 +56,6 @@ vc.creatingPromise.then((vc) => {
   stop.value = () => {
     clearInterval(fly);
   };
-  const frame = viewer.infoBox.frame;
   // frame.removeAttribute('sandbox');
   //   console.log(frame);
   //   frame.addEventListener(
@@ -75,6 +72,9 @@ vc.creatingPromise.then((vc) => {
   window.camera = camera;
   window.viewer = viewer;
   next.value = () => {
+    flyNext()
+  };
+  function flyNext() {
     const tour = tours[i];
     const p = tour.position;
     const v = p.getValue(clock.currentTime);
@@ -114,7 +114,7 @@ vc.creatingPromise.then((vc) => {
         i++;
       },
     });
-  };
+  }
 });
 </script>
 <style scoped>
