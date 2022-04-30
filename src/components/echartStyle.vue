@@ -8,14 +8,7 @@
 import {VcOverlayEcharts} from "vue-cesium";
 import { ref } from "vue";
 const echartOverlay = ref(null);
-  // Cesium.GeoJsonDataSource.load("面.json").then(function (dataSource) {
-  //   viewer.dataSources.add(dataSource).then((res) => {
-   
-  //   });
-  // });
-  // Cesium.GeoJsonDataSource.load("线.json").then(function (dataSource) {
-  //   viewer.dataSources.add(dataSource).then((res) => {});
-  // });
+
 const datas = [
   {
     level: 1,

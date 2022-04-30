@@ -5,7 +5,7 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/vue3-essential"
+        "plugin:vue/essential"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -14,8 +14,7 @@ module.exports = {
     "globals": {
         Cesium: 'readonly',
         defineProps: 'readonly'
-    },
-    "plugins": [
+    },    "plugins": [
         "vue"
     ],
     "rules": {
