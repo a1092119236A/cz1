@@ -59,19 +59,7 @@ onMounted(() => {
   stop.value = () => {
     clearInterval(fly);
   };
-  // frame.removeAttribute('sandbox');
-  //   console.log(frame);
-  //   frame.addEventListener(
-  //     "load",
-  //     function () {
-  //       const cssLink = frame.contentDocument.createElement("link");
-  //       cssLink.href = Cesium.buildModuleUrl("/infox.css");
-  //       cssLink.rel = "stylesheet";
-  //       cssLink.type = "text/css";
-  //       frame.contentDocument.head.appendChild(cssLink);
-  //     },
-  //     false
-  //   );
+
   window.camera = camera;
   window.viewer = viewer;
   next.value = () => {
@@ -102,12 +90,7 @@ onMounted(() => {
       // 只要任何一方大于0
       // 表示已经服务器已经返回宽高
       if (img.width > 0 || img.height > 0) {
-        img.style = `width:${img.width}px;height:${img.height}px;`;
-        console.log(
-          img.style.width,
-          img.style.height,
-          tour.properties.PopupInfo._value
-        );
+        img.style = `width:100%;height:auto;object-fit: cover;`;
 
         const div = document.createElement("div");
         div.innerHTML = ` 当前站点：${tour.name}<br>

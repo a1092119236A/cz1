@@ -1,4 +1,15 @@
-body{
+body {
     margin: 0px;
     padding: 0px;
+}
+.cesium-infoBox-iframe {
+    height: 500px !important;
+    color: rgb(251, 0, 255);
+  }
+.cesium-infoBox {
+    min-width: 200px;
+    text-align: center;
+    width: fit-content;
+    max-width: 9999px;
+    height: max-content;
 }
