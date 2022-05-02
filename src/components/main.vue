@@ -16,7 +16,6 @@ onMounted( () => {
     imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
     url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
   }),terrainProvider : Cesium.createWorldTerrain(),
-
     baseLayerPicker: false,
     animation: false,
     timeline: false,
@@ -25,8 +24,8 @@ onMounted( () => {
     homeButton: false,
     sceneModePicker: false,
     navigationHelpButton: false,
-    infoBox: false,
-    selectionIndicator: false,
+    infoBox:true,
+    selectionIndicator: true,
     scene3DOnly: true,
     shouldAnimate: true,
     contextOptions: {
@@ -35,6 +34,10 @@ onMounted( () => {
       }
     }
   });
+  //移除报错
+  viewer.infoBox.frame.removeAttribute("sandbox");
+  viewer.infoBox.frame.src = "about:blank";
+ 
   main.viewer=viewer;
   loadFlyControl.value=true;
   //取消默认双击事件
@@ -47,7 +50,7 @@ onMounted( () => {
 }).then(function (dataSource) {
     viewer.dataSources.add(dataSource).then((res) => {
    viewer.flyTo(res.entities,{
-      duration:1
+      duration:1,
 
    })
     });
