@@ -52,7 +52,6 @@ onMounted(() => {
     );
   }
   main.viewer = viewer;
-  loadFlyControl.value = true;
   //取消默认双击事件
   viewer.screenSpaceEventHandler.setInputAction(function () {},
   Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
@@ -65,6 +64,7 @@ onMounted(() => {
       viewer.flyTo(res.entities, {
         duration: 1,
       });
+      loadFlyControl.value = true;
     });
   });
   Cesium.GeoJsonDataSource.load("线.json").then(function (dataSource) {
